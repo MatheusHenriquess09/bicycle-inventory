@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<title>Login | ControlBike</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+body{
+    margin: 0;
+    height: 100vh;
+    font-family: 'Segoe UI', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #2c3e50, #4ca1af);
+}
+
+.container {
+    display: flex;
+    height: 100vh;
+}
+
+.left {
+    flex: 1;
+    background: transparent;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 40px;
+}
+
+.left h1 {
+    font-size: 40px;
+    margin-bottom: 10px;
+}
+
+.left p {
+    font-size: 18px;
+    opacity: 0.9;
+}
+
+.right {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #f5f7fa, #e4e8ec);
+}
+
+.login-box {
+    position: relative;
+    background: white;
+    padding: 40px;
+    border-radius: 16px;
+    width: 100%;
+    max-width: 350px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1), 0 2px 10px rgba(0,0,0,0.05);
+    border: 1px solid #eee;
+    animation: fadeUp 0.6s ease;
+}
+
+.login-box::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: #4ca1af;
+    border-radius: 16px 16px 0 0;
+}
+
+.login-box:hover {
+    transform: scale(1.01);
+    transition: 0.3s;
+}
+
+.login-box h2{
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+.login-box input{
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    transition: 0.3s;
+    outline: none;
+}
+
+.login-box input:focus {
+    border-color: #4ca1af;
+    box-shadow : 0 0 5px rgba(76, 161, 175, 0.5);
+}
+
+.login-box button{
+    position: relative;
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    background: #4ca1af;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.login-box button:hover{
+    background: #2c3e50;
+    transform: translateY(-2px);
+}
+
+.input-group {
+    position: relative;
+    margin: 4px 0;
+}
+
+.input-group i {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #aaa;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 12px 12px 12px 40px;
+    outline: none;
+    transition: 0.3s;
+}
+
+.input-group input:focus + i, .input-group:focus-within i {
+    color: #4ca1af;
+    transition: 0.3s;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 50px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #aaa;
+    transition: 0.3s;
+}
+
+.toggle-password:hover {
+    color: #4ca1af;
+}
+
+.toggle-password:active {
+    transform: translateY(-50%) scale(0.9);
+}
+
+.btn-text {
+    transition: 0.3s;
+}
+
+.spinner {
+    width: 18px;
+    height: 18px;
+    border: 3px solid rgba(255,255,255,0.3);
+    border-top: 3px solid white;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    animation: spin 0.8s linear infinite;
+    display: none;
+}
+
+.login-title {
+    position: relative;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.login-title::after {
+    content: "";
+    display: block;
+    width: 85px;
+    height: 3px;
+    margin: 4px auto 0;
+    background: #4ca1af;
+    border-radius: 10px;
+}
+
+#msg {
+    width: 100%;
+    text-align: center;
+    font-size: 14px;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    display: none;
+}
+
+@keyframes spin {
+    to {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
+}
+
+button.loading {
+    pointer-events: none;
+    opacity: 0.8;
+}
+
+button.loading .btn-text {
+    visibility: hidden;
+}
+
+button.loading .spinner {
+    display: block;
+}
+
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 768px) {
+    .left {
+        display: none;
+    }
+
+    .right {
+        flex: 1;
+    }
+}
+
+img {
+    width: 160px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+</style>
+
+</head>
+
+<link rel="icon" type="png" href="/img/LogoBike.webp">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<body>
+
+<div class="container">
+
+    <div class="left">
+        <img src="/img/LogoBike.webp" alt="Logo">
+        <h1>ControlBike</h1>
+        <p>Gerencie seu estoque de bicicletas de forma simples e eficiente.</p>
+    </div>
+
+    <div class="right">
+        <form id="form-login" class="login-box">
+
+            <h2 class="login-title">Login</h2>
+
+            <p id="msg"></p>
+
+            <div class="input-group">
+                <i class="fa fa-user"></i>
+                <input id="user" type="text" placeholder="Usuário">
+            </div>
+
+            <div class="input-group">
+                <i class="fa fa-lock"></i>
+                <input id="senha" type="password" placeholder="Senha">
+
+                <span class="toggle-password">
+                    <i class="fa fa-eye"></i>
+                </span>
+            </div>
+
+            <button type="submit" id="btn-login">
+                <span class="btn-text">Entrar</span>
+                <span class="spinner"></span>
+            </button>
+
+        </form>
+    </div>
+
+</div>
+
+<script>
+
+function login(){
+    const email = document.getElementById("user").value.trim()
+    const senha = document.getElementById("senha").value.trim()
+
+    if(email === "" || senha === ""){
+        mostrarMensagem("Preencha os campos", "aviso")
+        return
+    }
+
+    fetch("http://localhost:3000/login", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ email, senha })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if(data.usuario){
+            localStorage.setItem("usuario", JSON.stringify(data.usuario))
+            localStorage.setItem("cliente_id", data.usuario.cliente_id);
+            localStorage.setItem("token", data.token);
+            window.location.href = "index.html"
+        } else {
+            mostrarMensagem("Login inválido", "erro")
+        }
+    })
+}
+
+function mostrarMensagem(texto, tipo){
+
+const msg = document.getElementById("msg")
+
+msg.innerText = texto
+msg.style.display = "block"
+
+if(tipo === "erro") {
+    msg.style.background = "#fdecea"
+    msg.style.color = "#e74c3c"
+}
+
+if(tipo === "aviso") {
+    msg.style.background = "#fff4e5"
+    msg.style.color = "#ff9800"
+}
+
+setTimeout(() => {
+    msg.style.display = "none"
+}, 2000)
+
+}
+
+const form = document.getElementById('form-login');
+const button = document.getElementById('btn-login');
+
+form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    button.classList.add('loading');
+
+    try {
+        await new Promise(resolve => setTimeout(resolve, 2000));
+
+
+    } catch (err) {
+        console.error(err);
+    } finally {
+        button.classList.remove('loading');
+    }
+});
+
+const toggle = document.querySelector('.toggle-password i');
+const senhaInput = document.getElementById('senha');
+
+toggle.addEventListener('click', () => {
+    const isPassword = senhaInput.type === 'password';
+
+    senhaInput.type = isPassword ? 'text' : 'password';
+
+    toggle.classList.toggle('fa-eye');
+    toggle.classList.toggle('fa-eye-slash');
+});
+
+document.getElementById("form-login").addEventListener("submit", function(event) {
+    event.preventDefault();
+    login();
+});
+
+</script>
+
+</body>
+</html>

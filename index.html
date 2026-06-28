@@ -1,0 +1,1410 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Estoque | ControlBike</title>
+
+<style>
+
+*{
+    box-sizing: border-box;
+}
+
+body{
+    font-family: Arial, sans-serif;
+    background: #f4f6f9;
+    margin: 0;
+}
+
+.titulo{
+    text-align: center;
+    font-size: 32px;
+    margin-bottom: 25px;
+    color: #2c3e50;
+    letter-spacing: 1px;
+    margin: 0 auto 0 40px;
+}
+
+.titulo::after{
+    content: "";
+    display: block;
+    width: 120px;
+    height: 4px;
+    background: #2ecc71;
+    margin: 10px auto;
+    border-radius: 3px;
+}
+
+.main-content{
+    margin-left: 240px;
+    padding: 30px;
+}
+
+h2{
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+h3{
+    margin-top: 40px;
+}
+
+input{
+    width: 100%;
+    padding: 8px;
+    margin: 6px 0;
+    border-radius: 10px;
+    border: 2px solid #ccc;
+    font-size: 14px;
+}
+
+td input {
+    width: 100%;
+    max-width: 200px;
+}
+
+button{
+    width: auto;
+    padding: 12px 25px;
+    border-radius: 30px;
+    border: none;
+    font-size: 15px;
+    background: #2ecc71;
+    color:white;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+button:hover{
+    color: white;
+    background-color: #27ae60;
+}
+
+table{
+    width: 100%;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+    border-collapse: collapse;
+}
+
+th{
+    background: #2c3e50;
+    letter-spacing: 0.5px;
+    color: white;
+    padding: 10px;
+}
+
+td{
+    padding: 10px;
+    text-align: center;
+}
+
+th, td {
+    border-bottom: 1px solid #ddd;
+}
+
+th:not(:last-child), td:not(:last-child) {
+    border-right: 1px solid #ddd;
+}
+
+.busca-container{
+    margin-bottom: 20px;
+}
+
+.estoque-baixo{
+    background: #ffdddd !important;
+    color: #a30000;
+    font-weight: bold;
+}
+
+.form-grid{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 10px;
+
+}
+
+select{
+    width: 100%;
+    padding: 8px;
+    margin: 6px 0;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    background:white;
+}
+
+.filtros{
+    display: flex;
+    gap: 10px;
+    margin: 20px 0;
+    max-width: 803px;
+}
+
+#buscarProduto{
+    flex: 1;
+    font-size: 16px;
+    outline: none;
+}
+
+#filtrarCategoria{
+    flex: 1;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+}
+
+.dashboard {
+    display: grid;
+    grid-template-columns: repeat(5,1fr);
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.card {
+    background: white;
+    padding: 12px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    transition: 0.2s;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.card:hover {
+    transform: translateY(-3px);
+}
+
+.card h4 {
+margin: 0;
+color: #7f8c8d;
+font-size: 18px;
+margin-bottom: 10px;
+}
+
+.card p {
+font-size: 26px;
+font-weight: bold;
+margin-top: 8px;
+color: #2c3e50;
+margin: 0;
+}
+
+td button{
+    width: auto;
+    padding: 12px 12px;
+    font-size: 13px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.btn-editar, .btn-excluir {
+    width: 40px;
+    height: 40px;
+    margin: 0 2px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.btn-editar{
+    background: #2ecc71;
+    color: white;
+}
+
+.btn-excluir{
+    background: #e74c3c;
+    color: white;
+}
+
+.btn-editar:hover{
+    background: #27ae60;
+    transform: scale(1.1);
+}
+
+.btn-excluir:hover{
+    background: #c0392b;
+    transform: scale(1.1);
+}
+
+.quantidade{
+    min-width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    position: relative;
+    top: 2px;
+}
+
+#tabelaProdutos td{
+    vertical-align: middle;
+    padding: 6px 10px;
+}
+
+#msg{
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-weight: bold;
+    color: white;
+    opacity: 0;
+    pointer-events: none;
+    transition: 0.3s;
+}
+
+#msg.show{
+    opacity: 1;
+}
+
+.msg-sucesso{
+    background: #2ecc71;
+}
+
+.msg-erro{
+    background: #e74c3c;
+}
+
+.msg-aviso{
+    background: #ffab00;
+    color: #000;
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.modal-overlay.active {
+    display: flex;
+}
+
+.modal-box {
+    background: #1e293b;
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 300px;
+    text-align: center;
+    animation: fadeIn 0.2s ease;
+}
+
+.confirm-buttons{
+    margin-top: 15px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.btn-confirmar{
+    background: #2ecc71;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.btn-cancelar{
+    background: #e74c3c;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.btn-confirmar:hover {
+    background: #27ae60;
+}
+
+.btn-cancelar:hover {
+    background: #c0392b;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+body.modal-open {
+    overflow: hidden;
+}
+
+.top-bar{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 30px;
+}
+
+.btn-sair{
+    right: 0;
+    top: 0;
+    width: auto;
+    padding: 6px 12px;
+    font-size: 13px;
+    background: #e74c3c;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.btn-sair:hover{
+    background: #c0392b;
+    transform: scale(1.05);
+}
+
+#usuarioLogado{
+    font-weight: bold;
+    color: #2c3e50;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.user-area {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.modal{
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content{
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    width: 300px;
+    text-align: center;
+}
+
+.modal-content input{
+    width: 80%;
+    padding: 8px;
+    margin: 10px 0;
+}
+
+.botoes-modal{
+    display: flex;
+    justify-content: center;
+    gap: 4px;
+}
+
+.botoes-modal button{
+    flex: 1;
+    margin: 4px;
+    padding: 6px 10px;
+    cursor: pointer;
+}
+
+.modal-content h2{
+    margin-bottom: 5px;
+}
+
+.botoes-modal button:first-child{
+    background: #2ecc71;
+    color: white;
+    border: none;
+    border-radius: 8px;
+}
+
+.botoes-modal button:last-child{
+    background: #e74c3c;
+    color: white;
+    border: none;
+    border-radius: 8px;
+}
+
+.botoes-modal button:first-child:hover {
+    background: #27ae60;
+    transform: scale(1.05);
+}
+
+.botoes-modal button:last-child:hover {
+    background: #c0392b;
+    transform: scale(1.05);
+}
+
+.sidebar{
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 220px;
+    height: 100%;
+    background: #2c3e50;
+    color: white;
+    padding: 20px;
+}
+
+.sidebar .logo{
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.sidebar ul{
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar ul li{
+    padding: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-bottom: 10px;
+    transition: 0.2s;
+}
+
+.sidebar ul li:hover{
+    background: #34495e;
+}
+
+.sidebar ul li.active{
+    background: #2ecc71;
+}
+
+.header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.header h1{
+    margin: 0;
+    font-size: 24px;
+    color: #2c3e50;
+}
+
+.header p{
+    margin: 0;
+    font-size: 14px;
+    color: #7f8c8d;
+}
+
+.form-grid{
+    display: flex;
+    gap: 10px;
+}
+
+.form-grid input, .form-grid select{
+    width: 100%;
+    border-radius: 8px;
+    border: 2px solid #ccc;
+    height: 40px;
+    outline: none;
+}
+
+.form-box{
+    max-width: 800px;
+}
+
+.venda-box{
+    margin-top: 50px;
+    background: #34495e;
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.venda-box h3{
+    margin-bottom: 20px;
+}
+
+.venda-box p{
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.venda-box button{
+    width: 100%;
+    background: #2ecc71;
+}
+
+.venda-box button:hover {
+    color: #fff;
+    background-color: #27ae60;
+}
+
+tr.selecionado{
+    background: rgba(10, 126, 204, 0.3) !important;
+}
+
+#tabelaProdutos tbody tr:hover{
+    cursor: pointer;
+    background: rgba(255,255,255,0.05);
+}
+
+#btnVender:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.sidebar i, .logo i, button i {
+    margin-right: 8px;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.logo-img {
+    width: 35px;
+    height: auto;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+</style>
+
+</head>
+
+<link rel="icon" type="png" href="/img/LogoBike.webp">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<body>
+
+<p id="msg"></p>
+
+<div id="confirmBox" class="modal-overlay">
+  <div class="modal-box">
+
+    <p id="confirmText">Tem certeza?</p>
+
+    <div class="confirm-buttons">
+        <button id="btnConfirmar" onclick="confirmarAcao()" class="btn-confirmar">
+            Confirmar
+        </button>
+      <button onclick="fecharConfirm()" class="btn-cancelar">Cancelar</button>
+    </div>
+
+  </div>
+</div>
+
+<div class="sidebar">
+
+    <h2 class="logo">
+        <img src="/img/LogoBike.webp" class="logo-img">
+        ControlBike
+    </h2>
+
+    <ul>
+        <li class="active">
+            <i class="fas fa-box"></i> Estoque
+        </li>
+
+        <li onclick="irParaHistorico()">
+            <i class="fas fa-chart-line"></i> Histórico
+        </li>
+    </ul>
+
+    <div class="venda-box">
+        <h3>Venda</h3>
+
+        <p id="produtoSelecionado">Nenhum produto</p>
+
+        <button id="btnVender" onclick="abrirVendaSidebar()">
+            <i class="fas fa-shopping-cart"></i> Vender
+        </button>
+    </div>
+
+</div>
+
+<div class="main-content">
+
+<div class="header">
+
+    <div>
+        <h1>Dashboard</h1>
+        <p>Controle de estoque</p>
+    </div>
+
+    <div class="user-area">
+        <span id="usuarioLogado"></span>
+        <button class="btn-sair" onclick="logout()">Sair</button>
+    </div>
+
+</div>
+
+<div class="dashboard">
+
+<div class="card">
+<h4>Total Produtos</h4>
+<p id="totalProdutos">0</p>
+</div>
+
+<div class="card">
+<h4>Bicicletas</h4>
+<p id="totalBicicletas">0</p>
+</div>
+
+<div class="card">
+<h4>Peças</h4>
+<p id="totalPecas">0</p>
+</div>
+
+<div class="card">
+<h4>Acessórios</h4>
+<p id="totalAcessorios">0</p>
+</div>
+
+<div class="card">
+    <h4>Valor em Estoque</h4>
+    <p id="valorEstoque">R$ 0</p>
+</div>
+
+</div>
+
+<div class="form-box">
+
+<h3>Adicionar Produto</h3>
+
+<div class="form-grid">
+<input id="nome" placeholder="Nome do produto">
+<select id="categoria">
+<option>Bicicleta</option>
+<option>Peça</option>
+<option>Acessórios</option>
+</select>
+
+<input id="preco" type="number" placeholder="Preço">
+<input id="quantidade" type="number" placeholder="Quantidade">
+
+</div>
+</div>
+
+<button onclick="cadastrarProduto()">Cadastrar Produto</button>
+
+<div class="filtros">
+
+<input type="text" id="buscarProduto" placeholder="🔎 Buscar produto..." onkeyup="filtrarProdutos()">
+
+<select id="filtrarCategoria" onchange="filtrarProdutos()">
+<option value="">Todas as categorias</option>
+<option value="Bicicleta">Bicicleta</option>
+<option value="Peça">Peça</option>
+<option value="Acessórios">Acessórios</option>
+</select>
+
+</div>
+
+<h3 style="margin-top:30px;">Produtos</h3>
+
+<table id="tabelaProdutos">
+<thead>
+<tr>
+<th>ID</th>
+<th>Produto</th>
+<th>Categoria</th>
+<th>Preço</th>
+<th>Quantidade</th>
+<th>Ações</th>
+</tr>
+</thead>
+
+<tbody>
+
+</tbody>
+
+</table>
+
+</div>
+
+<div id="modalVenda" class="modal">
+    <div class="modal-content">
+        <h2>Registrar Venda</h2>
+
+        <p id="nomeProdutoVenda"></p>
+        <p id="estoqueProduto"></p>
+        <p id="totalVenda">Total: R$ 0</p>
+
+        <input type="number" id="quantidadeVenda" placeholder="Quantidade">
+
+        <div class="botoes-modal">
+            <button onclick="confirmarVenda()">Confirmar</button>
+            <button onclick="fecharModal()">Cancelar</button>
+        </div>
+    </div>
+</div>
+
+<script>
+
+const usuario = JSON.parse(localStorage.getItem("usuario"));
+
+function getHeaders(){
+    return {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + localStorage.getItem("token")
+    }
+}
+
+if(!usuario || !usuario.cliente_id){
+    window.location.href = "login.html";
+}
+
+let produtoSelecionado = null
+let produtoSelecionadoNome = ""
+let editando = false
+let linhaEditando = null
+let produtoSelecionadoQuantidade = 0
+let produtoSelecionadoPreco = 0
+
+function logout(){
+    document.getElementById("confirmText").innerText = "Deseja sair do sistema?";
+    
+    const box = document.getElementById("confirmBox");
+    box.classList.add("active");
+
+    document.body.classList.add("modal-open")
+    document.getElementById("btnConfirmar").innerText = "Sair";
+
+    idParaExcluir = "logout";
+}
+
+function irParaHistorico(){
+    window.location.href = "historico.html"
+}
+
+function cadastrarProduto(){
+
+const nome = document.getElementById("nome").value
+const categoria = document.getElementById("categoria").value
+const preco = document.getElementById("preco").value
+const quantidade = document.getElementById("quantidade").value
+
+if(nome === "" || preco === "" || quantidade === ""){
+    mostrarMensagem("Preencha todos os campos para cadastrar um produto", "aviso")
+    return
+}
+
+if(preco <= 0){
+    mostrarMensagem("O preço deve ser maior que zero", "aviso")
+    return
+}
+
+if(quantidade < 0){
+    mostrarMensagem("A quantidade não pode ser negativa", "aviso")
+    return
+}
+
+fetch("http://localhost:3000/produtos",{
+
+method:"POST",
+
+headers: getHeaders(),
+
+body:JSON.stringify({
+nome,
+categoria,
+preco,
+quantidade
+})
+
+})
+
+.then(res=>res.json())
+.then(data=>{
+
+mostrarMensagem(data.message, "sucesso")
+
+limparInputs()
+carregarProdutos()
+carregarHistorico()
+
+})
+
+}
+
+function carregarProdutos(){
+
+fetch("http://localhost:3000/produtos", {
+    headers: getHeaders()
+})
+.then(res => res.json())
+.then(produtos => {
+
+const tbody = document.querySelector("#tabelaProdutos tbody")
+if(!tbody) return
+
+tbody.innerHTML = ""
+
+let total = produtos.length
+let bicicletas = 0
+let pecas = 0
+let acessorios = 0
+let valorTotal = 0
+
+produtos.forEach(produto => {
+
+    const categoria = produto.categoria.toLowerCase()
+
+    valorTotal += Number(produto.preco) * Number(produto.quantidade)
+
+    if(categoria === "bicicleta") bicicletas++
+    if(categoria === "peça") pecas++
+    if(categoria === "acessórios") acessorios++
+
+    const estoqueBaixo = produto.quantidade <= 2 ? "estoque-baixo" : ""
+
+    const linha = `
+    <tr class="${estoqueBaixo}" onclick="selecionarProduto(${produto.id}, '${produto.nome}', event)">
+    <td>${produto.id}</td>
+    <td>${produto.nome}</td>
+    <td>${produto.categoria}</td>
+    <td>${produto.preco}</td>
+    <td>
+    <span class="quantidade">${produto.quantidade}</span>
+    </td>
+
+    <td>
+        <button class="btn-editar" title="Editar"
+            onclick="event.stopPropagation(); editarProduto(${produto.id}, this)">
+            <i class="fas fa-pen"></i>
+        </button>
+
+        <button class="btn-excluir" title="Excluir"
+            onclick="event.stopPropagation(); deletarProduto(${produto.id}, this)">
+            <i class="fas fa-trash"></i>
+        </button>
+    </td>
+
+    </tr>
+    `
+
+    tbody.innerHTML += linha
+
+})
+
+document.getElementById("totalProdutos").innerText = total
+document.getElementById("totalBicicletas").innerText = bicicletas
+document.getElementById("totalPecas").innerText = pecas
+document.getElementById("totalAcessorios").innerText = acessorios
+document.getElementById("valorEstoque").innerText = "R$ " + valorTotal.toFixed(2)
+
+})
+}
+
+
+let idParaExcluir = null;
+
+function deletarProduto(id, botao){
+    idParaExcluir = id;
+
+    const linha = botao.parentElement.parentElement
+    const nomeProduto = linha.children[1].innerText
+
+    document.getElementById("confirmText").innerText =
+        `Deseja excluir o produto "${nomeProduto}"?`;
+
+    document.getElementById("btnConfirmar").innerText = "Excluir";
+
+    const box = document.getElementById("confirmBox");
+    box.classList.add("active");
+    document.body.classList.add("modal-open");
+}
+
+function confirmarAcao(){
+
+if(idParaExcluir === "logout"){
+    localStorage.removeItem("usuario")
+    localStorage.removeItem("cliente_id")
+    window.location.href = "login.html"
+    return
+}
+
+fetch("http://localhost:3000/produtos/" + idParaExcluir, {
+    method: "DELETE",
+    headers: getHeaders()
+})
+.then(async res => {
+    const data = await res.json()
+
+    if(!res.ok){
+        throw new Error(data.message)
+    }
+
+    return data
+})
+.then(data => {
+    mostrarMensagem(data.message, "sucesso")
+    carregarProdutos()
+})
+.catch(err => {
+    mostrarMensagem(err.message, "erro")
+})
+
+fecharConfirm();
+
+}
+
+function filtrarProdutos(){
+
+const busca = document.getElementById("buscarProduto").value.toLowerCase()
+const categoria = document.getElementById("filtrarCategoria").value
+
+const linhas = document.querySelectorAll("#tabelaProdutos tbody tr")
+
+linhas.forEach(linha => {
+
+const texto = linha.innerText.toLowerCase()
+const categoriaLinha = linha.children[2].innerText
+
+const correspondeBusca = texto.includes(busca)
+const correspondeCategoria = categoria === "" || categoriaLinha === categoria
+
+if(correspondeBusca && correspondeCategoria){
+linha.style.display = ""
+}else{
+linha.style.display = "none"
+}
+
+})
+
+}
+
+function editarProduto(id, botao){
+
+if(editando){
+        mostrarMensagem("Finalize a edição atual primeiro!", "aviso")
+        return
+    }
+
+editando = true
+
+const linha = botao.parentElement.parentElement
+
+linhaEditando = linha
+
+const nome = linha.children[1].innerText
+const categoria = linha.children[2].innerText
+const preco = linha.children[3].innerText
+const quantidade = linha.children[4].querySelector(".quantidade").innerText
+
+linha.children[1].setAttribute("data-old", nome)
+linha.children[2].setAttribute("data-old", categoria)
+linha.children[3].setAttribute("data-old", preco)
+linha.children[4].setAttribute("data-old", quantidade)
+
+linha.children[1].innerHTML = `<input value="${nome}">`
+linha.children[2].innerHTML = `
+<select>
+<option ${categoria==="Bicicleta"?"selected":""}>Bicicleta</option>
+<option ${categoria==="Peça"?"selected":""}>Peça</option>
+<option ${categoria==="Acessórios"?"selected":""}>Acessórios</option>
+</select>
+`
+linha.children[3].innerHTML = `<input type="number" value="${preco}">`
+linha.children[4].innerHTML = `<input type="number" value="${quantidade}">`
+
+botao.innerHTML = '<i class="fas fa-check"></i>'
+botao.title = "Salvar"
+botao.onclick = function(){
+    salvarEdicao(id, linha)
+}
+
+}
+
+function salvarEdicao(id, linha){
+
+const nomeAntigo = linha.children[1].getAttribute("data-old") || linha.children[1].innerText
+const categoriaAntiga = linha.children[2].getAttribute("data-old") || linha.children[2].innerText
+const precoAntigo = linha.children[3].getAttribute("data-old") || linha.children[3].innerText
+const quantidadeAntiga = linha.children[4].getAttribute("data-old") || linha.children[4].innerText
+
+const nome = linha.children[1].children[0].value
+const categoria = linha.children[2].children[0].value
+const preco = linha.children[3].children[0].value
+const quantidade = linha.children[4].children[0].value
+
+const mudou = nome !== nomeAntigo || categoria !== categoriaAntiga || Number(preco) !== Number(precoAntigo) || Number(quantidade) !== Number(quantidadeAntiga)
+
+if(!mudou){
+    editando = false
+    carregarProdutos()
+    return
+}
+
+fetch("http://localhost:3000/produtos/" + id, {
+method: "PUT",
+headers: getHeaders(),
+body: JSON.stringify({
+nome,
+categoria,
+preco,
+quantidade
+})
+})
+.then(res => res.json())
+.then(() => {
+
+mostrarMensagem("Produto atualizado com sucesso!", "sucesso")
+
+if(nome !== nomeAntigo){
+    salvarHistorico(nome, "Ajuste no nome", 0)
+}
+
+if(categoria !== categoriaAntiga){
+    salvarHistorico(nome, "Ajuste na categoria", 0)
+}
+
+if(preco != precoAntigo){
+    salvarHistorico(nome, "Ajuste no preço", 0)
+}
+
+if(quantidade != quantidadeAntiga){
+    const diferenca = quantidade - quantidadeAntiga
+
+    if(diferenca !== 0){
+    salvarHistorico(nome, "Ajuste na quantidade", diferenca)
+}
+}
+
+editando = false
+linhaEditando = null
+carregarProdutos()
+
+})
+}
+
+let alterando = false;
+
+function mostrarMensagem(texto, tipo){
+
+if(!texto) texto = "Erro inesperado"
+
+const msg = document.getElementById("msg")
+
+if(!texto.endsWith("!")){
+    texto += "!"
+}
+
+msg.innerText = texto
+
+msg.className = ""
+msg.classList.add("show")
+
+if(tipo === "sucesso") msg.classList.add("msg-sucesso")
+if(tipo === "erro") msg.classList.add("msg-erro")
+if(tipo === "aviso") msg.classList.add("msg-aviso")
+
+setTimeout(() => {
+    msg.classList.remove("show")
+}, 2000)
+
+}
+
+function limparInputs(){
+
+document.getElementById("nome").value = ""
+document.getElementById("categoria").value = "Bicicleta"
+document.getElementById("preco").value = ""
+document.getElementById("quantidade").value = ""
+
+document.getElementById("nome").focus()
+
+}
+
+function salvarHistorico(produto, tipo, quantidade){
+
+    const data = new Date().toISOString()
+
+    return fetch("http://localhost:3000/historico", {
+        method: "POST",
+        headers: getHeaders(),
+        body: JSON.stringify({
+            produto,
+            tipo,
+            quantidade,
+            data
+        })
+    })
+
+}
+
+function carregarHistorico(){
+
+fetch("http://localhost:3000/historico", {
+    headers: getHeaders()
+})
+.then(res => res.json())
+.then(dados => {
+
+const tbody = document.querySelector("#tabelaHistorico tbody")
+
+if(!tbody) return
+
+tbody.innerHTML = ""
+
+dados.forEach(item => {
+
+let classeTipo = ""
+
+const tipo = item.tipo.toLowerCase()
+
+if(tipo.includes("venda")) classeTipo = "tipo-saida"
+if(tipo.includes("excluído")) classeTipo = "tipo-saida"
+if(tipo.includes("aumento")) classeTipo = "tipo-entrada"
+if(tipo.includes("novo")) classeTipo = "tipo-entrada"
+if(tipo.includes("ajuste")) classeTipo = "tipo-ajuste"
+
+const linha = `
+<tr>
+<td>${item.produto}</td>
+<td class="${classeTipo}">${item.tipo}</td>
+<td>${Number(item.quantidade) > 0 ? "+" + item.quantidade : item.quantidade}</td>
+<td>${item.data}</td>
+</tr>
+`
+
+tbody.innerHTML += linha
+
+})
+
+})
+
+}
+
+function filtrarHistorico(){
+
+const busca = document.getElementById("buscarHistorico").value.toLowerCase()
+const linhas = document.querySelectorAll("#tabelaHistorico tbody tr")
+
+linhas.forEach(linha => {
+
+const texto = linha.innerText.toLowerCase()
+
+if(texto.includes(busca)){
+    linha.style.display = ""
+}else{
+    linha.style.display = "none"
+}
+
+})
+
+}
+
+let produtoVendaId = null
+
+function abrirVenda(){
+
+    if(!produtoSelecionado){
+        mostrarMensagem("Selecione um produto primeiro", "aviso")
+        return
+    }
+
+    produtoVendaId = produtoSelecionado
+
+    document.getElementById("modalVenda").style.display = "flex"
+    document.getElementById("quantidadeVenda").value = ""
+}
+
+function confirmarVenda(){
+
+    const quantidade = document.getElementById("quantidadeVenda").value
+
+    if(!quantidade || quantidade <= 0){
+        mostrarMensagem("Quantidade inválida", "aviso")
+        return
+    }
+
+    if(quantidade > produtoSelecionadoQuantidade){
+        mostrarMensagem("Quantidade maior que o estoque!", "aviso")
+        return
+    }
+
+    fetch("http://localhost:3000/vendas", {
+        method: "POST",
+        headers: getHeaders(),
+        body: JSON.stringify({
+            produto_id: produtoVendaId,
+            quantidade: Number(quantidade)
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+
+        if(data.error){
+            mostrarMensagem(data.error, "erro")
+        }else{
+            mostrarMensagem(data.message, "sucesso")
+        }
+
+        fecharModal()
+        carregarProdutos()
+        carregarHistorico()
+
+        produtoSelecionado = null
+        produtoSelecionadoNome = ""
+        document.getElementById("produtoSelecionado").innerText = "Nenhum produto"
+
+    })
+
+}
+
+function selecionarProduto(id, nome, event){
+
+    produtoSelecionado = id
+    produtoSelecionadoNome = nome
+
+    const btnVender = document.getElementById("btnVender")
+    const textoSidebar = document.getElementById("produtoSelecionado")
+
+    const linha = event.currentTarget
+    const quantidadeEl = linha.querySelector(".quantidade")
+
+    if(!quantidadeEl) return
+
+    const quantidade = parseInt(quantidadeEl.innerText)
+    const preco = parseFloat(linha.children[3].innerText)
+
+    produtoSelecionadoQuantidade = quantidade
+    produtoSelecionadoPreco = preco
+
+    if(quantidade <= 0){
+        textoSidebar.innerText = "Sem estoque"
+        btnVender.disabled = true
+    }else{
+        textoSidebar.innerText = "Produto: " + nome
+        btnVender.disabled = false
+    }
+
+    document.querySelectorAll("#tabelaProdutos tbody tr")
+    .forEach(tr => tr.classList.remove("selecionado"))
+
+    linha.classList.add("selecionado")
+
+    document.getElementById("quantidadeVenda").value = ""
+}
+
+function abrirVendaSidebar(){
+
+    if(!produtoSelecionado){
+        mostrarMensagem("Selecione um produto primeiro", "aviso")
+        return
+    }
+
+    produtoVendaId = produtoSelecionado
+
+    document.getElementById("nomeProdutoVenda").innerText = "Produto: " + produtoSelecionadoNome
+    document.getElementById("estoqueProduto").innerText = "Estoque disponível: " + produtoSelecionadoQuantidade
+    document.getElementById("modalVenda").style.display = "flex"
+    document.body.style.overflow = "hidden"
+}
+
+function limparSelecao(){
+
+    produtoSelecionado = null
+    produtoSelecionadoNome = ""
+
+    document.getElementById("produtoSelecionado").innerText = "Nenhum produto"
+    document.querySelectorAll("#tabelaProdutos tbody tr")
+    .forEach(tr => tr.classList.remove("selecionado"))
+}
+
+function fecharModal(){
+
+    document.getElementById("modalVenda").style.display = "none"
+    document.body.style.overflow = "auto"
+    limparSelecao()
+}
+
+function fecharConfirm(){
+    const box = document.getElementById("confirmBox");
+
+    box.classList.remove("active");
+    document.body.classList.remove("modal-open");
+    idParaExcluir = null;
+}
+
+document.addEventListener("click", function(e){
+
+    const clicouNaTabela = e.target.closest("#tabelaProdutos")
+    const clicouNaSidebar = e.target.closest(".sidebar")
+    const clicouNoModal = e.target.closest("#modalVenda")
+
+    if(editando && !clicouNaTabela){
+        editando = false
+        linhaEditando = null
+        carregarProdutos()
+        return
+    }
+
+    if(!clicouNaTabela && !clicouNaSidebar && !clicouNoModal){
+        limparSelecao()
+    }
+
+})
+
+document.querySelectorAll("#nome, #categoria, #preco, #quantidade")
+.forEach(input => {
+    input.addEventListener("keydown", function(event) {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            cadastrarProduto();
+        }
+    });
+});
+
+document.getElementById("quantidadeVenda")
+.addEventListener("input", function(){
+
+    const quantidade = Number(this.value)
+    const total = quantidade * produtoSelecionadoPreco
+
+    document.getElementById("totalVenda").innerText = "Total: R$ " + total.toFixed(2)
+})
+
+const usuarioObj = JSON.parse(localStorage.getItem("usuario"));
+
+document.getElementById("usuarioLogado").innerHTML =
+    `<i class="fas fa-user"></i> ${usuarioObj?.nome || "Usuário"}`;
+
+carregarProdutos()
+carregarHistorico()
+
+</script>
+
+</body>
+</html>
