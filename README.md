@@ -20,6 +20,22 @@ Sistema desenvolvido para gerenciamento de estoque de uma loja de bicicletas.
 - Histórico de movimentações
 - Busca de produtos
 
-## Imagens
+## Login
 
-![Login](screenshots/login.png)
+![Login](screenshots/Login.png)
+
+## Dashboard
+
+![Dashboard](screenshots/Lobby.png)
+
+## Venda
+
+![Venda](screenshots/Venda.png)
+
+## Histórico
+
+![Histórico](screenshots/Historico.png)
+
+## Histórico Completo
+
+![Histórico Completo](screenshots/Historico2.png)
