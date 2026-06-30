@@ -23,4 +23,3 @@ Sistema desenvolvido para gerenciamento de estoque de uma loja de bicicletas.
 ## Imagens
 
 ![Login](screenshots/login.png
-
